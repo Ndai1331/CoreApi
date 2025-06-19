@@ -219,5 +219,112 @@ namespace CoreAPI.Controllers
 
             return response;
         }
+
+        /// <summary>
+        /// Get detailed inspection information with filtering capabilities
+        /// </summary>
+        /// <param name="fromDate">Start date (optional)</param>
+        /// <param name="toDate">End date (optional)</param>
+        /// <param name="province">Province ID (optional)</param>
+        /// <param name="ward">Ward ID (optional)</param>
+        /// <param name="offset">Pagination offset</param>
+        /// <param name="limit">Pagination limit</param>
+        /// <returns>Detailed inspection information</returns>
+        [HttpGet("chitiet")]
+        public async Task<DirectusResponse<QLCLChiTietKiemTraHauKiemATTP>> GetChiTiet(
+            [FromQuery] DateTime? fromDate = null,
+            [FromQuery] DateTime? toDate = null,
+            [FromQuery] int? province = null,
+            [FromQuery] int? ward = null,
+            [FromQuery] string stringSearch  = null,
+            [FromQuery] int offset = 0,
+            [FromQuery] int limit = 10)
+        {
+            var response = new DirectusResponse<QLCLChiTietKiemTraHauKiemATTP>();
+
+            try
+            {
+                // Use raw SQL with function for detailed inspection data
+                var sql = @"
+                    SELECT * FROM QLCLFunctionChiTietKiemTraHauKiemATTP(
+                        @FromDate, @ToDate, @Province, @Ward, @StringSearch 
+                    )
+                    ORDER BY id DESC
+                    OFFSET @Offset ROWS
+                    FETCH NEXT @Limit ROWS ONLY";
+
+                var items = await _context.QLCLChiTietKiemTraHauKiemATTP
+                    .FromSqlRaw(sql,
+                        new Microsoft.Data.SqlClient.SqlParameter("@FromDate", fromDate ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@ToDate", toDate ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Province", province ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Ward", ward ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@StringSearch", stringSearch ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Offset", offset),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Limit", limit))
+                    .ToListAsync();
+
+                // Get total count using a separate query
+                var countSql = @"
+                    SELECT COUNT(*) as TotalCount FROM QLCLFunctionChiTietKiemTraHauKiemATTP(
+                        @FromDate, @ToDate, @Province, @Ward, @StringSearch
+                    )";
+
+                var totalCount = 0;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = countSql;
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@FromDate", fromDate ?? (object)DBNull.Value));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@ToDate", toDate ?? (object)DBNull.Value));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@Province", province ?? (object)DBNull.Value));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@Ward", ward ?? (object)DBNull.Value));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@StringSearch", stringSearch ?? (object)DBNull.Value));
+
+                    if (command.Connection.State != System.Data.ConnectionState.Open)
+                        command.Connection.Open();
+
+                    var result = command.ExecuteScalar();
+                    totalCount = result != null ? Convert.ToInt32(result) : 0;
+                }
+
+                response.Data = items;
+                response.Meta = new DirectusMeta
+                {
+                    total_count = totalCount,
+                    filter_count = items.Count(),
+                    offset = offset,
+                    limit = limit,
+                    page_count = (int)Math.Ceiling((double)totalCount / limit),
+                    sort = new List<string> { "-id"},
+                    filter = new
+                    {
+                        fromDate = fromDate?.ToString("yyyy-MM-dd"),
+                        toDate = toDate?.ToString("yyyy-MM-dd"),
+                        province = province,
+                        ward = ward,
+                        stringSearch = stringSearch
+                    }
+                };
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting QLCL Chi Tiet Kiem Tra Hau Kiem ATTP data");
+                response.Errors.Add(new ErrorResponse
+                {
+                    Message = "Internal server error",
+                    Code = "INTERNAL_ERROR",
+                    Reason = ex.Message,
+                    Extensions = new ExtensionsResponse
+                    {
+                        code = "INTERNAL_ERROR",
+                        reason = ex.Message
+                    }
+                });
+                response.StatusCode = HttpStatusCode.InternalServerError;
+            }
+
+            return response;
+        }
     }
 } 

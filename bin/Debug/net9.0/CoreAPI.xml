@@ -18,6 +18,18 @@
             <param name="ward">Ward ID (optional)</param>
             <returns>Detailed establishment information</returns>
         </member>
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetChiTiet(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+            <summary>
+            Get detailed inspection information with filtering capabilities
+            </summary>
+            <param name="fromDate">Start date (optional)</param>
+            <param name="toDate">End date (optional)</param>
+            <param name="province">Province ID (optional)</param>
+            <param name="ward">Ward ID (optional)</param>
+            <param name="offset">Pagination offset</param>
+            <param name="limit">Pagination limit</param>
+            <returns>Detailed inspection information</returns>
+        </member>
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
             Application Database Context for DRCARE_CORE database
@@ -31,6 +43,11 @@
         <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLDetailCoSoKiemTraHauKiemATTP">
             <summary>
             QLCL Detail Co So Kiem Tra Hau Kiem ATTP
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLChiTietKiemTraHauKiemATTP">
+            <summary>
+            QLCL Chi Tiet Kiem Tra Hau Kiem ATTP
             </summary>
         </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">

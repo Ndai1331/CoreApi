@@ -20,13 +20,13 @@ namespace CoreAPI.Models
         /// Tỉnh/thành phố
         /// </summary>
         [Column("province")]
-        public int? province { get; set; }
+        public int province { get; set; }
         
         /// <summary>
         /// Quận/huyện
         /// </summary>
         [Column("ward")]
-        public int? ward { get; set; }
+        public int ward { get; set; }
         
         /// <summary>
         /// Tổng số đợt kiểm tra
@@ -73,5 +73,16 @@ namespace CoreAPI.Models
         public string dia_chi { get; set; }
         public string dien_thoai { get; set; }
         public string dai_dien { get; set; }
+    }
+
+    public class QLCLChiTietKiemTraHauKiemATTP
+    {
+        public int id { get; set; }
+        public string san_pham { get; set; }
+        public int? so_luong_mau { get; set; } = 0;
+        public string chi_tieu { get; set; }
+        public int? so_mau_khong_dat { get; set; } = 0;
+        public string chi_tieu_vi_pham { get; set; }
+        public string muc_phat_hien { get; set; }
     }
 } 
