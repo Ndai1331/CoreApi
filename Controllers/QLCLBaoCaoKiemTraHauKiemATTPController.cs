@@ -27,16 +27,6 @@ namespace CoreAPI.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get QLCL Bao Cao Kiem Tra Hau Kiem ATTP data using function with parameters
-        /// </summary>
-        /// <param name="fromDate">Filter from date (yyyy-MM-dd)</param>
-        /// <param name="toDate">Filter to date (yyyy-MM-dd)</param>
-        /// <param name="province">Filter by province ID</param>
-        /// <param name="ward">Filter by ward ID</param>
-        /// <param name="offset">Offset for pagination (default: 0)</param>
-        /// <param name="limit">Limit for pagination (default: 10)</param>
-        /// <returns>Filtered data using function</returns>
         [HttpGet]
         public async Task<DirectusResponse<QLCLBaoCaoKiemTraHauKiemATTP>> GetWithFilter(
             [FromQuery] DateTime? fromDate = null,

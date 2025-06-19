@@ -28,7 +28,7 @@ jobs:
     - name: Build and Push Admin Image
       if: contains(steps.commit.outputs.message, '[API]') || contains(steps.commit.outputs.message, '[ALL]')
       run: |
-        docker build --platform linux/amd64 -t longnguyen1331/drcore-api:latest -f CoreAPI/Dockerfile .
+        docker build --platform linux/amd64 -t longnguyen1331/drcore-api:latest -f ./Dockerfile .
         docker push longnguyen1331/drcore-api:latest
 
     - name: Send Telegram notification on success
