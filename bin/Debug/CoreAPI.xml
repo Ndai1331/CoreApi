@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CoreAPI</name>
+    </assembly>
+    <members>
+        <member name="T:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController">
+            <summary>
+            Controller for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
+            </summary>
+        </member>
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetWithFilter(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Int32,System.Int32)">
+            <summary>
+            Get QLCL Bao Cao Kiem Tra Hau Kiem ATTP data using function with parameters
+            </summary>
+            <param name="fromDate">Filter from date (yyyy-MM-dd)</param>
+            <param name="toDate">Filter to date (yyyy-MM-dd)</param>
+            <param name="province">Filter by province ID</param>
+            <param name="ward">Filter by ward ID</param>
+            <param name="offset">Offset for pagination (default: 0)</param>
+            <param name="limit">Limit for pagination (default: 10)</param>
+            <returns>Filtered data using function</returns>
+        </member>
+        <member name="T:CoreAPI.Models.ApplicationDbContext">
+            <summary>
+            Application Database Context for DRCARE_CORE database
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLBaoCaoKiemTraHauKiemATTP">
+            <summary>
+            QLCL Bao Cao Kiem Tra Hau Kiem ATTP View
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">
+            <summary>
+            Model for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.thang">
+            <summary>
+            Tháng báo cáo (yyyy-MM format)
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.province">
+            <summary>
+            Tỉnh/thành phố
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.ward">
+            <summary>
+            Quận/huyện
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.tong_dot_kiem_tra">
+            <summary>
+            Tổng số đợt kiểm tra
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.tong_co_so_kiem_tra">
+            <summary>
+            Tổng số cơ sở kiểm tra
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.so_vi_pham">
+            <summary>
+            Số cơ sở vi phạm
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.so_chap_hanh">
+            <summary>
+            Số cơ sở chấp hành
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.so_dat">
+            <summary>
+            Số cơ sở đạt
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.so_khong_dat">
+            <summary>
+            Số cơ sở không đạt
+            </summary>
+        </member>
+    </members>
+</doc>

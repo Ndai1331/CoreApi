@@ -1,0 +1,14 @@
+services:
+  drcore-api:
+    image: longnguyen1331/drcore-api:latest
+    ports:
+      - "8057:8057"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8057
+    restart: unless-stopped
+    networks:
+      - drcore-network
+networks:
+  drcore-network:
+    driver: bridge
