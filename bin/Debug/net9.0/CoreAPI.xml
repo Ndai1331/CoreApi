@@ -30,6 +30,24 @@
             <param name="limit">Pagination limit</param>
             <returns>Detailed inspection information</returns>
         </member>
+        <member name="T:CoreAPI.Controllers.QLCLBaoCaoThamDinhCapGCNController">
+            <summary>
+            Controller for QLCL Bao Cao Tham Dinh Cap GCN
+            </summary>
+        </member>
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoThamDinhCapGCNController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+            <summary>
+            Get detailed information about establishments that were not granted certificates
+            </summary>
+            <param name="fromDate">Start date (optional)</param>
+            <param name="toDate">End date (optional)</param>
+            <param name="province">Province ID (optional)</param>
+            <param name="ward">Ward ID (optional)</param>
+            <param name="stringSearch">Search string (optional)</param>
+            <param name="offset">Pagination offset</param>
+            <param name="limit">Pagination limit</param>
+            <returns>Detailed establishment information</returns>
+        </member>
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
             Application Database Context for DRCARE_CORE database
@@ -48,6 +66,16 @@
         <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLChiTietKiemTraHauKiemATTP">
             <summary>
             QLCL Chi Tiet Kiem Tra Hau Kiem ATTP
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLBaoCaoThamDinhCapGCN">
+            <summary>
+            QLCL Bao Cao Tham Dinh Cap GCN
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLCoSoKhongDuocCapGCN">
+            <summary>
+            QLCL Co So Khong Duoc Cap GCN
             </summary>
         </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">
@@ -98,6 +126,76 @@
         <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.so_khong_dat">
             <summary>
             Số cơ sở không đạt
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN">
+            <summary>
+            Model for QLCL Bao Cao Tham Dinh Cap GCN
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.thang">
+            <summary>
+            Tháng báo cáo (yyyy-MM format)
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.tong_co_so_tham_dinh">
+            <summary>
+            Tổng số đợt kiểm tra
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.so_dat">
+            <summary>
+            Tổng số cơ sở kiểm tra
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.so_khong_dat">
+            <summary>
+            Số cơ sở vi phạm
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.so_co_so_duoc_cap_gcn">
+            <summary>
+            Số cơ sở đạt
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLBaoCaoThamDinhCapGCN.ty_le_co_so_duoc_cap_gcn">
+            <summary>
+            Tỷ lệ cơ sở được cấp GCN (percentage format - 0.00 to 100.00)
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN">
+            <summary>
+            Model for establishments that were not granted certificates
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.id">
+            <summary>
+            Establishment ID
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.code">
+            <summary>
+            Establishment code
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.name">
+            <summary>
+            Establishment name
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.dia_chi">
+            <summary>
+            Establishment address
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.dien_thoai">
+            <summary>
+            Establishment phone number
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.dai_dien">
+            <summary>
+            Establishment representative
             </summary>
         </member>
     </members>

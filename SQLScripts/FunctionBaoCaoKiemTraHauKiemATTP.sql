@@ -27,6 +27,7 @@ RETURN
         AND (@ToDate IS NULL OR qlcl.ngay_kiem_tra <= @ToDate)
         AND (@Province IS NULL OR qlcl.province = @Province)
         AND (@Ward IS NULL OR qlcl.ward = @Ward)
+        AND qlcl.deleted = 0
     GROUP BY
         FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM'),
         qlcl.province,

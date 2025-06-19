@@ -40,4 +40,5 @@ RETURN
         AND (@StringSearch IS NULL OR sp.name LIKE N'%' + @StringSearch + '%'
             OR ct.chi_tieu_vi_pham LIKE N'%' + @StringSearch + '%'
             OR ct.muc_phat_hien LIKE N'%' + @StringSearch + '%')
+        AND ct.deleted = 0
 ) 

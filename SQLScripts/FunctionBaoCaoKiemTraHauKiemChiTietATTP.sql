@@ -25,6 +25,7 @@ RETURN
         AND (@Ward IS NULL OR qlcl.ward = @Ward)
         AND qlcl.ngay_kiem_tra IS NOT NULL
         AND qlcl.ket_qua_kiem_tra = 2
+        AND qlcl.deleted = 0
     GROUP BY
         cs.id,
         cs.code,

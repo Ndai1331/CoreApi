@@ -26,6 +26,16 @@ namespace CoreAPI.Models
         /// </summary>
         public DbSet<QLCLChiTietKiemTraHauKiemATTP> QLCLChiTietKiemTraHauKiemATTP { get; set; }
 
+        /// <summary>
+        /// QLCL Bao Cao Tham Dinh Cap GCN
+        /// </summary>
+        public DbSet<QLCLBaoCaoThamDinhCapGCN> QLCLBaoCaoThamDinhCapGCN { get; set; }
+
+        /// <summary>
+        /// QLCL Co So Khong Duoc Cap GCN
+        /// </summary>
+        public DbSet<FunctionCoSoKhongDuocCapGCN> QLCLCoSoKhongDuocCapGCN { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -45,6 +55,15 @@ namespace CoreAPI.Models
                 .ToView("QLCLViewChiTietKiemTraHauKiemATTP")
                 .HasKey(e => e.id);
 
+            // Configure QLCLBaoCaoThamDinhCapGCN view
+            modelBuilder.Entity<QLCLBaoCaoThamDinhCapGCN>()
+                .ToView("QLCLViewBaoCaoThamDinhCapGCN")
+                .HasKey(e => e.thang);
+
+            // Configure QLCLCoSoKhongDuocCapGCN view
+            modelBuilder.Entity<FunctionCoSoKhongDuocCapGCN>()
+                .ToView("QLCLViewCoSoKhongDuocCapGCN")
+                .HasKey(e => e.id);
         }
     }
 } 
