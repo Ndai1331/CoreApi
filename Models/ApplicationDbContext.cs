@@ -16,6 +16,11 @@ namespace CoreAPI.Models
         /// </summary>
         public DbSet<QLCLBaoCaoKiemTraHauKiemATTP> QLCLBaoCaoKiemTraHauKiemATTP { get; set; }
 
+        /// <summary>
+        /// QLCL Detail Co So Kiem Tra Hau Kiem ATTP
+        /// </summary>
+        public DbSet<QLCLDetailCoSoKiemTraHauKiemATTP> QLCLDetailCoSoKiemTraHauKiemATTP { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -23,7 +28,12 @@ namespace CoreAPI.Models
             // Configure QLCLBaoCaoKiemTraHauKiemATTP view with composite key
             modelBuilder.Entity<QLCLBaoCaoKiemTraHauKiemATTP>()
                 .ToView("QLCLViewBaoCaoKiemTraHauKiemATTP")
-                .HasKey(e => new { e.thang, e.province, e.ward });
+                .HasKey(e => new { e.thang });
+
+            // Configure QLCLDetailCoSoKiemTraHauKiemATTP view
+            modelBuilder.Entity<QLCLDetailCoSoKiemTraHauKiemATTP>()
+                .ToView("QLCLViewDetailCoSoKiemTraHauKiemATTP")
+                .HasKey(e => e.id);
 
         }
     }

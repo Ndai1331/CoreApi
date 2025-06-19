@@ -119,5 +119,105 @@ namespace CoreAPI.Controllers
 
             return response;
         }
+
+        /// <summary>
+        /// Get detailed information about establishments for a specific month, province, and ward
+        /// </summary>
+        /// <param name="thangNam">Month and year in format 'yyyy-MM'</param>
+        /// <param name="province">Province ID (optional)</param>
+        /// <param name="ward">Ward ID (optional)</param>
+        /// <returns>Detailed establishment information</returns>
+        [HttpGet("detail")]
+        public async Task<DirectusResponse<QLCLDetailCoSoKiemTraHauKiemATTP>> GetDetail(
+            [FromQuery] string thangNam,
+            [FromQuery] int? province = null,
+            [FromQuery] int? ward = null)
+        {
+            var response = new DirectusResponse<QLCLDetailCoSoKiemTraHauKiemATTP>();
+
+            try
+            {
+                // Validate thangNam format
+                if (string.IsNullOrEmpty(thangNam) || !System.Text.RegularExpressions.Regex.IsMatch(thangNam, @"^\d{4}-\d{2}$"))
+                {
+                    response.Errors.Add(new ErrorResponse
+                    {
+                        Message = "Invalid thangNam format. Use 'yyyy-MM' format",
+                        Code = "INVALID_FORMAT",
+                        Reason = "thangNam must be in 'yyyy-MM' format"
+                    });
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    return response;
+                }
+
+                // Use raw SQL with function for detailed data
+                var sql = @"
+                    SELECT * FROM QLCLFunctionDetailCoSoKiemTraHauKiemATTP(
+                        @ThangNam, @Province, @Ward
+                    )
+                    ORDER BY code DESC
+                    ";
+
+                var items = await _context.QLCLDetailCoSoKiemTraHauKiemATTP
+                    .FromSqlRaw(sql,
+                        new Microsoft.Data.SqlClient.SqlParameter("@ThangNam", thangNam),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Province", province ?? (object)DBNull.Value),
+                        new Microsoft.Data.SqlClient.SqlParameter("@Ward", ward ?? (object)DBNull.Value))
+                    .ToListAsync();
+
+                // Get total count using a separate query
+                var countSql = @"
+                    SELECT COUNT(*) as TotalCount FROM QLCLFunctionDetailCoSoKiemTraHauKiemATTP(
+                        @ThangNam, @Province, @Ward
+                    )";
+
+                var totalCount = 0;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = countSql;
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@ThangNam", thangNam));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@Province", province ?? (object)DBNull.Value));
+                    command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@Ward", ward ?? (object)DBNull.Value));
+
+                    if (command.Connection.State != System.Data.ConnectionState.Open)
+                        command.Connection.Open();
+
+                    var result = command.ExecuteScalar();
+                    totalCount = result != null ? Convert.ToInt32(result) : 0;
+                }
+
+                response.Data = items;
+                response.Meta = new DirectusMeta
+                {
+                    total_count = totalCount,
+                    sort = new List<string> { "code" },
+                    filter = new
+                    {
+                        thangNam = thangNam,
+                        province = province,
+                        ward = ward
+                    }
+                };
+                response.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting QLCL Detail Co So Kiem Tra Hau Kiem ATTP data");
+                response.Errors.Add(new ErrorResponse
+                {
+                    Message = "Internal server error",
+                    Code = "INTERNAL_ERROR",
+                    Reason = ex.Message,
+                    Extensions = new ExtensionsResponse
+                    {
+                        code = "INTERNAL_ERROR",
+                        reason = ex.Message
+                    }
+                });
+                response.StatusCode = HttpStatusCode.InternalServerError;
+            }
+
+            return response;
+        }
     }
 } 

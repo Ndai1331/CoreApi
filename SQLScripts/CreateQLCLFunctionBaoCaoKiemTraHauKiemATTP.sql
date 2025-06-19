@@ -31,4 +31,39 @@ RETURN
         FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM'),
         qlcl.province,
         qlcl.ward
+)
+
+-- Create Table-Valued Function for QLCL Detail Co So Kiem Tra Hau Kiem ATTP
+CREATE OR ALTER FUNCTION QLCLFunctionDetailCoSoKiemTraHauKiemATTP(
+    @ThangNam NVARCHAR(7), -- Format: 'yyyy-MM'
+    @Province INT = NULL,
+    @Ward INT = NULL
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        ROW_NUMBER() OVER (ORDER BY cs.code) AS id,
+        qlcl.co_so,
+        cs.code,
+        cs.name,
+        cs.dia_chi,
+        cs.dien_thoai,
+        cs.dai_dien
+    FROM
+        QLCLKiemTraHauKiemATTP qlcl
+        INNER JOIN QLCLCoSoNLTSDuDieuKienATTP cs ON qlcl.co_so = cs.id
+    WHERE
+        FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM') = @ThangNam
+        AND (@Province IS NULL OR qlcl.province = @Province)
+        AND (@Ward IS NULL OR qlcl.ward = @Ward)
+        AND qlcl.ngay_kiem_tra IS NOT NULL
+    GROUP BY
+        qlcl.co_so,
+        cs.code,
+        cs.name,
+        cs.dia_chi,
+        cs.dien_thoai,
+        cs.dai_dien
 ) 

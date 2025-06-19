@@ -9,17 +9,14 @@
             Controller for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
             </summary>
         </member>
-        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetWithFilter(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Int32,System.Int32)">
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetDetail(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
-            Get QLCL Bao Cao Kiem Tra Hau Kiem ATTP data using function with parameters
+            Get detailed information about establishments for a specific month, province, and ward
             </summary>
-            <param name="fromDate">Filter from date (yyyy-MM-dd)</param>
-            <param name="toDate">Filter to date (yyyy-MM-dd)</param>
-            <param name="province">Filter by province ID</param>
-            <param name="ward">Filter by ward ID</param>
-            <param name="offset">Offset for pagination (default: 0)</param>
-            <param name="limit">Limit for pagination (default: 10)</param>
-            <returns>Filtered data using function</returns>
+            <param name="thangNam">Month and year in format 'yyyy-MM'</param>
+            <param name="province">Province ID (optional)</param>
+            <param name="ward">Ward ID (optional)</param>
+            <returns>Detailed establishment information</returns>
         </member>
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
@@ -29,6 +26,11 @@
         <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLBaoCaoKiemTraHauKiemATTP">
             <summary>
             QLCL Bao Cao Kiem Tra Hau Kiem ATTP View
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLDetailCoSoKiemTraHauKiemATTP">
+            <summary>
+            QLCL Detail Co So Kiem Tra Hau Kiem ATTP
             </summary>
         </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">

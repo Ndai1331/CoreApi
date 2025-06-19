@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -62,5 +63,16 @@ namespace CoreAPI.Models
         /// </summary>
         [Column("so_khong_dat")]
         public int so_khong_dat { get; set; }
+    }
+
+    public class QLCLDetailCoSoKiemTraHauKiemATTP
+    {
+        public long id { get; set; }
+        public int co_so { get; set; }
+        public string code { get; set; }
+        public string name { get; set; }
+        public string dia_chi { get; set; }
+        public string dien_thoai { get; set; }
+        public string dai_dien { get; set; }
     }
 } 
