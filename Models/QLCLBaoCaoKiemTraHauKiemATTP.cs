@@ -67,8 +67,7 @@ namespace CoreAPI.Models
 
     public class QLCLDetailCoSoKiemTraHauKiemATTP
     {
-        public long id { get; set; }
-        public int co_so { get; set; }
+        public int id { get; set; }
         public string code { get; set; }
         public string name { get; set; }
         public string dia_chi { get; set; }
