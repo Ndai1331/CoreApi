@@ -5,7 +5,7 @@ EXPOSE 80
 FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore "CoreAPI.sln"
+RUN dotnet restore "CoreAPI.generated.sln"
 WORKDIR /src/CoreAPI
 RUN dotnet build "CoreAPI.csproj" -c Release -o /app/build
 
