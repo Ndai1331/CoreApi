@@ -36,6 +36,12 @@ namespace CoreAPI.Models
         /// </summary>
         public DbSet<FunctionCoSoKhongDuocCapGCN> QLCLCoSoKhongDuocCapGCN { get; set; }
 
+        /// <summary>
+        /// QLCL Dashboard
+        /// </summary>
+        public DbSet<QLCLDashboard> QLCLDashboard { get; set; }
+        public DbSet<QLCLDashboardLoaiHinhCoSo> QLCLDashboardLoaiHinhCoSo { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -64,6 +70,16 @@ namespace CoreAPI.Models
             modelBuilder.Entity<FunctionCoSoKhongDuocCapGCN>()
                 .ToView("QLCLViewCoSoKhongDuocCapGCN")
                 .HasKey(e => e.id);
+
+            // Configure QLCLDashboard view
+            modelBuilder.Entity<QLCLDashboard>()
+                .ToView("QLCLViewDashboard")
+                .HasKey(e => e.so_luong_co_so);
+
+            // Configure QLCLDashboardLoaiHinhCoSo view
+            modelBuilder.Entity<QLCLDashboardLoaiHinhCoSo>()
+                .ToView("QLCLViewDashboardLoaiHinhCoSo")
+                .HasKey(e => e.code);
         }
     }
 } 

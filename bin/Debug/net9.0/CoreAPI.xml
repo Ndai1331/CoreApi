@@ -48,6 +48,24 @@
             <param name="limit">Pagination limit</param>
             <returns>Detailed establishment information</returns>
         </member>
+        <member name="T:CoreAPI.Controllers.QLCLDashboardController">
+            <summary>
+            Controller for QLCL Bao Cao Tham Dinh Cap GCN
+            </summary>
+        </member>
+        <member name="M:CoreAPI.Controllers.QLCLDashboardController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+            <summary>
+            Get detailed information about establishments that were not granted certificates
+            </summary>
+            <param name="fromDate">Start date (optional)</param>
+            <param name="toDate">End date (optional)</param>
+            <param name="province">Province ID (optional)</param>
+            <param name="ward">Ward ID (optional)</param>
+            <param name="stringSearch">Search string (optional)</param>
+            <param name="offset">Pagination offset</param>
+            <param name="limit">Pagination limit</param>
+            <returns>Detailed establishment information</returns>
+        </member>
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
             Application Database Context for DRCARE_CORE database
@@ -76,6 +94,11 @@
         <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLCoSoKhongDuocCapGCN">
             <summary>
             QLCL Co So Khong Duoc Cap GCN
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLDashboard">
+            <summary>
+            QLCL Dashboard
             </summary>
         </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">
@@ -196,6 +219,51 @@
         <member name="P:CoreAPI.Models.FunctionCoSoKhongDuocCapGCN.dai_dien">
             <summary>
             Establishment representative
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLDashboard">
+            <summary>
+            Model for QLCL Bao Cao Tham Dinh Cap GCN
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.so_luong_co_so">
+            <summary>
+            Tổng số cơ sở
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.so_luong_co_so_dat_chung_nhan">
+            <summary>
+            Tổng số cơ sở được cấp GCN
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.so_luong_vu_vi_pham">
+            <summary>
+            Tổng số cơ sở vi phạm
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.so_dot_kiem_tra">
+            <summary>
+            Số cơ sở vi phạm
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo">
+            <summary>
+            Model for QLCL Dashboard Loai Hinh Co So
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo.code">
+            <summary>
+            Loại hình cơ sở code
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo.name">
+            <summary>
+            Loại hình cơ sở name
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo.so_luong_co_so">
+            <summary>
+            Số lượng cơ sở
             </summary>
         </member>
     </members>
