@@ -50,7 +50,7 @@
         </member>
         <member name="T:CoreAPI.Controllers.QLCLDashboardController">
             <summary>
-            Controller for QLCL Bao Cao Tham Dinh Cap GCN
+            Controller for QLCL Dashboard
             </summary>
         </member>
         <member name="M:CoreAPI.Controllers.QLCLDashboardController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
@@ -71,49 +71,9 @@
             Application Database Context for DRCARE_CORE database
             </summary>
         </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLBaoCaoKiemTraHauKiemATTP">
-            <summary>
-            QLCL Bao Cao Kiem Tra Hau Kiem ATTP View
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLDetailCoSoKiemTraHauKiemATTP">
-            <summary>
-            QLCL Detail Co So Kiem Tra Hau Kiem ATTP
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLChiTietKiemTraHauKiemATTP">
-            <summary>
-            QLCL Chi Tiet Kiem Tra Hau Kiem ATTP
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLBaoCaoThamDinhCapGCN">
-            <summary>
-            QLCL Bao Cao Tham Dinh Cap GCN
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLCoSoKhongDuocCapGCN">
-            <summary>
-            QLCL Co So Khong Duoc Cap GCN
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.ApplicationDbContext.QLCLDashboard">
-            <summary>
-            QLCL Dashboard
-            </summary>
-        </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">
             <summary>
             Model for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.thang">
-            <summary>
-            Tháng báo cáo (yyyy-MM format)
-            </summary>
-        </member>
-        <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.province">
-            <summary>
-            Tỉnh/thành phố
             </summary>
         </member>
         <member name="P:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP.ward">
@@ -246,6 +206,46 @@
             Số cơ sở vi phạm
             </summary>
         </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.loai_hinh_co_so">
+            <summary>
+            Danh sách loại hình cơ sở
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboard.gcn_sap_het_han">
+            <summary>
+            Danh sách cơ sở có GCN sắp hết hạn
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLDashboardGCNSapHetHan">
+            <summary>
+            Model for establishments with certificates expiring soon
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardGCNSapHetHan.id">
+            <summary>
+            Establishment ID
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardGCNSapHetHan.name">
+            <summary>
+            Establishment name
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardGCNSapHetHan.so_giay_chung_nhan">
+            <summary>
+            Certificate number
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardGCNSapHetHan.ngay_het_hieu_luc">
+            <summary>
+            Certificate expiry date
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardGCNSapHetHan.so_ngay_con_lai">
+            <summary>
+            Days remaining until expiry
+            </summary>
+        </member>
         <member name="T:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo">
             <summary>
             Model for QLCL Dashboard Loai Hinh Co So
@@ -264,6 +264,16 @@
         <member name="P:CoreAPI.Models.QLCLDashboardLoaiHinhCoSo.so_luong_co_so">
             <summary>
             Số lượng cơ sở
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLDashboardSoDotKiemTraTheoThang">
+            <summary>
+            Model for QLCL Dashboard Loai Hinh Co So
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.QLCLDashboardSoDotKiemTraTheoThang.t1">
+            <summary>
+            Loại hình cơ sở code
             </summary>
         </member>
     </members>
