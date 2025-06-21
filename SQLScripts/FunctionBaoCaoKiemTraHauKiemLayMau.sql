@@ -22,7 +22,7 @@ RETURN
         ELSE ''
         END AS chi_tieu,
         CASE ct.so_mau_khong_dat
-            WHEN 0 THEN NULL
+            WHEN NULL THEN 0
             ELSE ct.so_mau_khong_dat
         END AS so_mau_khong_dat,
         ct.chi_tieu_vi_pham,

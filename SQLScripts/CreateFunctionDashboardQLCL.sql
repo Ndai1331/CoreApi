@@ -31,13 +31,23 @@ RETURN
             AND (@ToDate IS NULL OR qlcl.ngay_ghi_nhan <= @ToDate)
             AND qlcl.deleted = 0) AS so_luong_vu_vi_pham,
         
+        -- Đếm số đợt kiểm tra trong từng tháng và tổng hợp lại
         (SELECT
-            COUNT(DISTINCT kthk.dot_kiem_tra)
-        FROM
-            QLCLKiemTraHauKiemATTP kthk
-        WHERE
-            kthk.ngay_kiem_tra IS NOT NULL
-            AND (@FromDate IS NULL OR kthk.ngay_kiem_tra >= @FromDate)
-            AND (@ToDate IS NULL OR kthk.ngay_kiem_tra <= @ToDate)
-            AND kthk.deleted = 0) AS so_dot_kiem_tra
+            SUM(monthly_inspections)
+        FROM (
+            SELECT 
+                YEAR(kthk.ngay_kiem_tra) * 100 + MONTH(kthk.ngay_kiem_tra) AS year_month,
+                COUNT(DISTINCT kthk.dot_kiem_tra) AS monthly_inspections
+            FROM
+                QLCLKiemTraHauKiemATTP kthk
+            WHERE
+                kthk.ngay_kiem_tra IS NOT NULL
+                AND kthk.dot_kiem_tra IS NOT NULL
+                AND kthk.dot_kiem_tra != ''
+                AND (@FromDate IS NULL OR kthk.ngay_kiem_tra >= @FromDate)
+                AND (@ToDate IS NULL OR kthk.ngay_kiem_tra <= @ToDate)
+                AND kthk.deleted = 0
+            GROUP BY 
+                YEAR(kthk.ngay_kiem_tra) * 100 + MONTH(kthk.ngay_kiem_tra)
+        ) AS monthly_summary) AS so_dot_kiem_tra
 ) 

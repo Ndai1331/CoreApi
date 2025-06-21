@@ -248,8 +248,8 @@ namespace CoreAPI.Controllers
                 so_luong_mau = reader.IsDBNull(2) ? 0 : reader.GetInt32(2),
                 chi_tieu = reader.GetString(3),
                 so_mau_khong_dat = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
-                chi_tieu_vi_pham = reader.GetString(5),
-                muc_phat_hien = reader.GetString(6)
+                chi_tieu_vi_pham = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                muc_phat_hien = reader.IsDBNull(6) ? "" :reader.GetString(6)
             });
         }
 
