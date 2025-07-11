@@ -4,6 +4,11 @@
         <name>CoreAPI</name>
     </assembly>
     <members>
+        <member name="T:CoreAPI.Controllers.QLCLBaoCaoBienDongGiaController">
+            <summary>
+            Controller for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
+            </summary>
+        </member>
         <member name="T:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController">
             <summary>
             Controller for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
@@ -69,6 +74,11 @@
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
             Application Database Context for DRCARE_CORE database
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.QLCLBaoCaoBienDongGia">
+            <summary>
+            Model for QLCL Bao Cao Bien Dong Gia
             </summary>
         </member>
         <member name="T:CoreAPI.Models.QLCLBaoCaoKiemTraHauKiemATTP">
