@@ -6,8 +6,8 @@ RETURN
 (
     SELECT
         lhtt.name AS [LoaiHinhThienTai],
-        SUM(ttttct.dien_tich) AS [TongDienTich],
-        SUM(ttttct.san_luong) AS [TongSanLuong]
+        CAST(ISNULL(SUM(ttttct.dien_tich), 0) AS DECIMAL(18,2)) AS [TongDienTich],
+        CAST(ISNULL(SUM(ttttct.san_luong), 0) AS DECIMAL(18,2)) AS [TongSanLuong]
     FROM DuLieuThietHaiThienTai tttt
     INNER JOIN LoaiHinhThienTai lhtt ON lhtt.id = tttt.loai_hinh_thien_tai
     LEFT JOIN DuLieuThietHaiThienTaiChiTiet ttttct 
