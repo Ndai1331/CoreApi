@@ -71,6 +71,11 @@
             <param name="limit">Pagination limit</param>
             <returns>Detailed establishment information</returns>
         </member>
+        <member name="T:CoreAPI.Controllers.TTDashboardController">
+            <summary>
+            Controller for TT Dashboard
+            </summary>
+        </member>
         <member name="T:CoreAPI.Models.ApplicationDbContext">
             <summary>
             Application Database Context for DRCARE_CORE database
@@ -284,6 +289,101 @@
         <member name="P:CoreAPI.Models.QLCLDashboardSoDotKiemTraTheoThang.t1">
             <summary>
             Loại hình cơ sở code
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.TTDashBoardLoaiHinhThienTaiModel">
+            <summary>
+            Represents a model for dashboard data related to different types of natural disasters.
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardLoaiHinhThienTaiModel.LoaiHinhThienTai">
+            <summary>
+            Tên loại hình thiên tai
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardLoaiHinhThienTaiModel.TongDienTich">
+            <summary>
+            Tổng diện tích bị thiệt hại
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardLoaiHinhThienTaiModel.TongSanLuong">
+            <summary>
+            Tổng sản lượng bị thiệt hại
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.TTDashBoardModel">
+            <summary>
+            Represents the dashboard model for tracking various agricultural production and business metrics.
+            </summary>
+            <remarks>This model includes counts of production and business facilities for fertilizers and plant
+            protection products, as well as data on violations and damage caused by natural disasters and
+            diseases.</remarks>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.CoSoSanXuatPhanBonCount">
+            <summary>
+            Số lượng cơ sở sản xuất phân bón
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.CoSoDuDieuKienBuonBanPhanBonCount">
+            <summary>
+            Số lượng cơ sở kinh doanh phân bón
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.CoSoSanXuatThuocBVTVCount">
+            <summary>
+            Số lượng cơ sở sản xuất thuốc BVTV
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.CoSoKinhDoanhThuocBVTVCount">
+            <summary>
+            Số lượng cơ sở kinh doanh thuốc BVTV
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.ViPhamSanXuatKinhDoanhThuocBVTVCount">
+            <summary>
+            Số lượng cơ sở vi phạm sản xuất kinh doanh thuốc BVTV
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.DienTichThietHaiDoThienTaiDichBenh">
+            <summary>
+            Dữ liệu biểu đồ tròn về diện tich thiệt hại do thiên tai dịch bệnh
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardModel.SanLuongThietHaiDoThienTaiDichBenh">
+            <summary>
+            Dữ liệu biểu đồ tròn về sản lượng thiệt hại do thiên tai dịch bệnh
+            </summary>
+        </member>
+        <member name="T:CoreAPI.Models.PieChartDataModel">
+            <summary>
+            Represents the data model for a pie chart, including series values, labels, and colors.
+            </summary>
+            <remarks>This model is used to store the data necessary for rendering a pie chart. Each list should
+            have corresponding elements, where each index represents a segment of the pie chart. Ensure that the number of
+            elements in <see cref="P:CoreAPI.Models.PieChartDataModel.Series"/>, <see cref="P:CoreAPI.Models.PieChartDataModel.Labels"/>, and <see cref="P:CoreAPI.Models.PieChartDataModel.Colors"/> are equal to maintain
+            consistency in the chart representation.</remarks>
+        </member>
+        <member name="T:CoreAPI.Models.TTDashBoardViSinhVatGayHaiModel">
+            <summary>
+            Represents a model for tracking harmful microorganisms and their impact on agricultural areas.
+            </summary>
+            <remarks>This model is used to store information about harmful microorganisms, including their name,
+            the total affected area, and the total yield loss. It is typically used in agricultural dashboards to assess and
+            manage the impact of these microorganisms.</remarks>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardViSinhVatGayHaiModel.ViSinhVatGayHai">
+            <summary>
+            Tên vi sinh vật gây hại
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardViSinhVatGayHaiModel.TongDienTich">
+            <summary>
+            Tổng diện tích bị thiệt hại
+            </summary>
+        </member>
+        <member name="P:CoreAPI.Models.TTDashBoardViSinhVatGayHaiModel.TongSanLuong">
+            <summary>
+            Tổng sản lượng bị thiệt hại
             </summary>
         </member>
     </members>
