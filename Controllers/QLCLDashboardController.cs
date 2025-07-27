@@ -31,19 +31,21 @@ namespace CoreAPI.Controllers
         [HttpGet]
         public async Task<DirectusResponse<QLCLDashboard>> GetWithFilter(
             [FromQuery] DateTime? fromDate = null,
-            [FromQuery] DateTime? toDate = null)
+            [FromQuery] DateTime? toDate = null,
+            [FromQuery] int? province = null,
+            [FromQuery] int? ward = null)
         {
             var response = new DirectusResponse<QLCLDashboard>();
 
             try
             {
                 // Get main dashboard data
-                var dashboardData = await GetDashboardData(fromDate, toDate);
+                var dashboardData = await GetDashboardData(fromDate, toDate, province, ward);
                 
                 // Get additional data
-                var loaiHinhCoSoItems = await GetLoaiHinhCoSoData(fromDate, toDate);
-                var gcnSapHetHanItems = await GetGCNSapHetHanData();
-                var soDotKiemTraTheoThangItems = await GetSoDotKiemTraTheoThangData();
+                var loaiHinhCoSoItems = await GetLoaiHinhCoSoData(fromDate, toDate, province, ward);
+                var gcnSapHetHanItems = await GetGCNSapHetHanData(province, ward);
+                var soDotKiemTraTheoThangItems = await GetSoDotKiemTraTheoThangData(province, ward);
 
                 // Combine data
                 foreach (var item in dashboardData)
@@ -111,29 +113,33 @@ namespace CoreAPI.Controllers
 
         #region Private Methods
 
-        private async Task<List<QLCLDashboard>> GetDashboardData(DateTime? fromDate, DateTime? toDate)
+        private async Task<List<QLCLDashboard>> GetDashboardData(DateTime? fromDate, DateTime? toDate, int? province, int? ward)
         {
-            var sql = "SELECT * FROM FunctionDashboardQLCL(@FromDate, @ToDate)";
+            var sql = "SELECT * FROM FunctionDashboardQLCL(@FromDate, @ToDate, @Province, @Ward)";
             return await ExecuteQueryAsync<QLCLDashboard>(sql, new Dictionary<string, object>
             {
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
-                ["@ToDate"] = toDate ?? (object)DBNull.Value
+                ["@ToDate"] = toDate ?? (object)DBNull.Value,
+                ["@Province"] = province ?? (object)DBNull.Value,
+                ["@Ward"] = ward ?? (object)DBNull.Value
             }, reader => new QLCLDashboard
             {
-                so_luong_co_so = reader.GetInt32(0),
-                so_luong_co_so_dat_chung_nhan = reader.GetInt32(1),
-                so_luong_vu_vi_pham = reader.GetInt32(2),
-                so_dot_kiem_tra = reader.GetInt32(3)
+                so_luong_co_so = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                so_luong_co_so_dat_chung_nhan = reader.IsDBNull(1) ? 0 : reader.GetInt32(1),
+                so_luong_vu_vi_pham = reader.IsDBNull(2) ? 0 : reader.GetInt32(2),
+                so_dot_kiem_tra = reader.IsDBNull(3) ? 0 : reader.GetInt32(3)
             });
         }
 
-        private async Task<List<QLCLDashboardLoaiHinhCoSo>> GetLoaiHinhCoSoData(DateTime? fromDate, DateTime? toDate)
+        private async Task<List<QLCLDashboardLoaiHinhCoSo>> GetLoaiHinhCoSoData(DateTime? fromDate, DateTime? toDate, int? province, int? ward)
         {
-            var sql = "SELECT * FROM FunctionDashboardLoaiHinhCoSoQLCL(@FromDate, @ToDate)";
+            var sql = "SELECT * FROM FunctionDashboardLoaiHinhCoSoQLCL(@FromDate, @ToDate, @Province, @Ward)";
             return await ExecuteQueryAsync<QLCLDashboardLoaiHinhCoSo>(sql, new Dictionary<string, object>
             {
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
-                ["@ToDate"] = toDate ?? (object)DBNull.Value
+                ["@ToDate"] = toDate ?? (object)DBNull.Value,
+                ["@Province"] = province ?? (object)DBNull.Value,
+                ["@Ward"] = ward ?? (object)DBNull.Value
             }, reader => new QLCLDashboardLoaiHinhCoSo
             {
                 code = reader.GetString(0),
@@ -142,10 +148,13 @@ namespace CoreAPI.Controllers
             });
         }
 
-        private async Task<List<QLCLDashboardGCNSapHetHan>> GetGCNSapHetHanData()
+        private async Task<List<QLCLDashboardGCNSapHetHan>> GetGCNSapHetHanData(int? province, int? ward)
         {
-            var sql = "SELECT * FROM FunctionDashboardGCNSapHetHan()";
-            return await ExecuteQueryAsync<QLCLDashboardGCNSapHetHan>(sql, new Dictionary<string, object>(), reader => new QLCLDashboardGCNSapHetHan
+            var sql = "SELECT * FROM FunctionDashboardGCNSapHetHan( @Province, @Ward )";
+            return await ExecuteQueryAsync<QLCLDashboardGCNSapHetHan>(sql, new Dictionary<string, object>(){
+                ["@Province"] = province ?? (object)DBNull.Value,
+                ["@Ward"] = ward ?? (object)DBNull.Value
+            }, reader => new QLCLDashboardGCNSapHetHan
             {
                 id = reader.GetInt32(0),
                 name = reader.GetString(1),
@@ -155,11 +164,13 @@ namespace CoreAPI.Controllers
             });
         }
 
-        private async Task<List<QLCLDashboardSoDotKiemTraTheoThang>> GetSoDotKiemTraTheoThangData()
+        private async Task<List<QLCLDashboardSoDotKiemTraTheoThang>> GetSoDotKiemTraTheoThangData(int? province, int? ward)
         {
-            var sql = "SELECT * FROM FunctionSoDotKiemTraTheoThang(@Year)";
+            var sql = "SELECT * FROM FunctionSoDotKiemTraTheoThang(@Year, @Province, @Ward)";
             return await ExecuteQueryAsync<QLCLDashboardSoDotKiemTraTheoThang>(sql, new Dictionary<string, object>
             {
+                ["@Province"] = province ?? (object)DBNull.Value,
+                ["@Ward"] = ward ?? (object)DBNull.Value,
                 ["@Year"] = DateTime.Now.Year
             }, reader => new QLCLDashboardSoDotKiemTraTheoThang
             {

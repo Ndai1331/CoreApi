@@ -1,7 +1,9 @@
 -- Create FunctionDashboardLoaiHinhCoSoQLCL function
 CREATE OR ALTER FUNCTION FunctionDashboardLoaiHinhCoSoQLCL(
     @FromDate DATE = NULL,
-    @ToDate DATE = NULL
+    @ToDate DATE = NULL,
+    @Province INT = NULL,
+    @Ward INT = NULL
 )
 RETURNS TABLE
 AS
@@ -17,7 +19,9 @@ RETURN
     WHERE
         lhcs.deleted = 0
         AND (cs.deleted = 0 OR cs.deleted IS NULL)
-    GROUP BY
+        AND (@Province IS NULL OR cs.province = @Province)
+        AND (@Ward IS NULL OR cs.ward = @Ward)
+        GROUP BY
         lhcs.code,
         lhcs.name
     ORDER BY
