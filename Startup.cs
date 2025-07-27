@@ -38,6 +38,18 @@ namespace CoreAPI
             {
                 options.AutomaticAuthentication = false;
             });
+              // Add CORS policy to allow any origin
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ExposeResponseHeaders", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+           
+           
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<GzipCompressionProvider>();
