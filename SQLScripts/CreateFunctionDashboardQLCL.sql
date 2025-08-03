@@ -1,14 +1,19 @@
 -- Create FunctionDashboardQLCL function
 CREATE OR ALTER FUNCTION FunctionDashboardQLCL(
     @FromDate DATE = NULL,
-    @ToDate DATE = NULL
+    @ToDate DATE = NULL,
+    @Province INT = NULL,
+    @Ward INT = NULL
 )
 RETURNS TABLE
 AS
 RETURN
 (
     SELECT
-        (SELECT COUNT(*) FROM QLCLCoSoCheBienNLTS WHERE deleted = 0) AS so_luong_co_so,
+        (SELECT COUNT(*) FROM QLCLCoSoCheBienNLTS WHERE deleted = 0 
+           AND (@Province IS NULL OR province = @Province)
+                AND (@Ward IS NULL OR ward = @Ward)
+        ) AS so_luong_co_so,
         
         (SELECT
             SUM(CASE WHEN qlcl.ket_qua_tham_dinh = 1 AND qlcl.so_giay_chung_nhan IS NOT NULL AND qlcl.so_giay_chung_nhan != '' THEN 1 ELSE 0 END)
@@ -25,10 +30,14 @@ RETURN
             COUNT(*)
         FROM
             QLCLCoSoViPhamATTP qlcl
+            left join QLCLCoSoCheBienNLTS co_so_che_bien_nlts on qlcl.co_so_che_bien_nlts = co_so_che_bien_nlts.id
+            left join QLCLCoSoNLTSDuDieuKienATTP co_so_nlts_du_dieu_kien_attp on qlcl.co_so_nlts_du_dieu_kien_attp = co_so_nlts_du_dieu_kien_attp.id
         WHERE
             qlcl.ngay_ghi_nhan IS NOT NULL
             AND (@FromDate IS NULL OR qlcl.ngay_ghi_nhan >= @FromDate)
             AND (@ToDate IS NULL OR qlcl.ngay_ghi_nhan <= @ToDate)
+            AND (@Province IS NULL OR co_so_che_bien_nlts.province = @Province OR co_so_nlts_du_dieu_kien_attp.province = @Province)
+            AND (@Ward IS NULL OR co_so_che_bien_nlts.ward = @Ward OR co_so_nlts_du_dieu_kien_attp.ward = @Ward)
             AND qlcl.deleted = 0) AS so_luong_vu_vi_pham,
         
         -- Đếm số đợt kiểm tra trong từng tháng và tổng hợp lại
@@ -46,6 +55,8 @@ RETURN
                 AND kthk.dot_kiem_tra != ''
                 AND (@FromDate IS NULL OR kthk.ngay_kiem_tra >= @FromDate)
                 AND (@ToDate IS NULL OR kthk.ngay_kiem_tra <= @ToDate)
+                AND (@Province IS NULL OR kthk.province = @Province)
+                AND (@Ward IS NULL OR kthk.ward = @Ward)
                 AND kthk.deleted = 0
             GROUP BY 
                 YEAR(kthk.ngay_kiem_tra) * 100 + MONTH(kthk.ngay_kiem_tra)

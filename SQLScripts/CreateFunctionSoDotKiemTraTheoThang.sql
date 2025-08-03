@@ -1,4 +1,6 @@
 CREATE OR ALTER FUNCTION FunctionSoDotKiemTraTheoThang(
+    @Province INT,
+    @Ward INT,
     @Year INT
 )
 RETURNS TABLE
@@ -22,5 +24,7 @@ RETURN
         QLCLKiemTraHauKiemATTP kthk
     WHERE
         kthk.deleted = 0
-        AND YEAR(kthk.ngay_kiem_tra) = @Year
+        AND YEAR(kthk.ngay_kiem_tra) = @YEAR
+        AND (@Province IS NULL OR kthk.province = @Province)
+        AND (@Ward IS NULL OR kthk.ward = @Ward)
 ) 
