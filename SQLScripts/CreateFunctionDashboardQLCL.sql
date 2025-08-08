@@ -19,10 +19,13 @@ RETURN
             SUM(CASE WHEN qlcl.ket_qua_tham_dinh = 1 AND qlcl.so_giay_chung_nhan IS NOT NULL AND qlcl.so_giay_chung_nhan != '' THEN 1 ELSE 0 END)
         FROM
             QLCLCoSoNLTSDuDieuKienATTP qlcl
+            
         WHERE
             qlcl.ngay_tham_dinh IS NOT NULL
             AND (@FromDate IS NULL OR qlcl.ngay_tham_dinh >= @FromDate)
             AND (@ToDate IS NULL OR qlcl.ngay_tham_dinh <= @ToDate)
+            AND (@Province IS NULL OR qlcl.province = @Province OR qlcl.province = @Province)
+            AND (@Ward IS NULL OR qlcl.ward = @Ward OR qlcl.ward = @Ward)
             AND qlcl.deleted = 0
             AND qlcl.loai = 1) AS so_luong_co_so_dat_chung_nhan,
         
