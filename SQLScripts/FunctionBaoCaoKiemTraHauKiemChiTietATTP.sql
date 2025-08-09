@@ -3,7 +3,7 @@
 CREATE OR ALTER FUNCTION QLCLFunctionDetailCoSoKiemTraHauKiemATTP(
     @ThangNam NVARCHAR(7), -- Format: 'yyyy-MM'
     @Province INT = NULL,
-    @Ward INT = NULL
+    @Ward VARCHAR(500) = NULL
 )
 RETURNS TABLE
 AS
@@ -22,7 +22,7 @@ RETURN
     WHERE
         FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM') = @ThangNam
         AND (@Province IS NULL OR qlcl.province = @Province)
-        AND (@Ward IS NULL OR qlcl.ward = @Ward)
+        AND (@Ward IS NULL OR qlcl.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND qlcl.ngay_kiem_tra IS NOT NULL
         AND qlcl.ket_qua_kiem_tra = 2
         AND qlcl.deleted = 0

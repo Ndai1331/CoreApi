@@ -3,7 +3,7 @@ CREATE OR ALTER FUNCTION QLCLFunctionBaoCaoKiemTraHauKiemATTP(
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @Province INT = NULL,
-    @Ward INT = NULL
+    @Ward VARCHAR(500) = NULL
 )
 RETURNS TABLE
 AS
@@ -26,10 +26,11 @@ RETURN
         AND (@FromDate IS NULL OR qlcl.ngay_kiem_tra >= @FromDate)
         AND (@ToDate IS NULL OR qlcl.ngay_kiem_tra <= @ToDate)
         AND (@Province IS NULL OR qlcl.province = @Province)
-        AND (@Ward IS NULL OR qlcl.ward = @Ward)
+        AND (@Ward IS NULL OR qlcl.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND qlcl.deleted = 0
     GROUP BY
         FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM'),
         qlcl.province,
         qlcl.ward
 )
+ 

@@ -37,7 +37,12 @@ RETURN
         AND (@Province IS NULL OR QLCLGiaCaNongSan.province = @Province)
         AND (@Ward IS NULL OR QLCLGiaCaNongSan.ward = @Ward)
         AND (@Loai IS NULL OR @Loai = 1) -- Filter for agricultural products
-        AND (@TenSanPham IS NULL OR QLCLSanPhamSanXuat.name LIKE '%' + @TenSanPham + '%')
+        AND (
+            @TenSanPham IS NULL
+            OR QLCLSanPhamSanXuat.name LIKE '%' + @TenSanPham + '%'
+            OR QLCLGiaCaNongSan.nha_cung_cap LIKE '%' + @TenSanPham + '%'
+            OR @TenSanPham = '1'
+        )
 
     UNION ALL
 
@@ -67,6 +72,11 @@ RETURN
         AND (@Province IS NULL OR QLCLGiaCaVatTuNN.province = @Province)
         AND (@Ward IS NULL OR QLCLGiaCaVatTuNN.ward = @Ward)
         AND (@Loai IS NULL OR @Loai = 2) -- Filter for agricultural materials
-        AND (@TenSanPham IS NULL OR QLCL_VatTuNongNghiep.name LIKE '%' + @TenSanPham + '%')
+        AND (
+            @TenSanPham IS NULL
+            OR QLCL_VatTuNongNghiep.name LIKE '%' + @TenSanPham + '%'
+            OR QLCLGiaCaVatTuNN.nha_cung_cap LIKE '%' + @TenSanPham + '%'
+            OR @TenSanPham = '2'
+        )
 )
 

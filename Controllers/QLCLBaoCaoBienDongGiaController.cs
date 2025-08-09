@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CoreAPI.Models;
 using CoreAPI.Models.BaseResponse;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace CoreAPI.Controllers
 {
@@ -32,9 +32,9 @@ namespace CoreAPI.Controllers
             [FromQuery] DateTime? fromDate = null,
             [FromQuery] DateTime? toDate = null,
             [FromQuery] int? province = null,
-            [FromQuery] int? ward = null,
+            [FromQuery] string wards = null,
             [FromQuery] int? loai = null,
-            [FromQuery] string? tenSanPham = null,
+            [FromQuery] string tenSanPham = null,
             [FromQuery] int offset = 0,
             [FromQuery] int limit = 10)
         {
@@ -42,11 +42,11 @@ namespace CoreAPI.Controllers
 
             try
             {
-                var items = await GetBaoCaoBienDongGiaData(fromDate, toDate, province, ward, loai, tenSanPham, offset, limit);
-                var totalCount = await GetBaoCaoBienDongGiaCount(fromDate, toDate, province, ward, loai, tenSanPham);
+                var items = await GetBaoCaoBienDongGiaData(fromDate, toDate, province, wards, loai, tenSanPham, offset, limit);
+                var totalCount = await GetBaoCaoBienDongGiaCount(fromDate, toDate, province, wards, loai, tenSanPham);
 
                 response.Data = items;
-                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, ward, loai, tenSanPham);
+                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, wards, loai, tenSanPham);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace CoreAPI.Controllers
 
         #region Private Methods
 
-        private async Task<List<QLCLBaoCaoBienDongGia>> GetBaoCaoBienDongGiaData(DateTime? fromDate, DateTime? toDate, int? province, int? ward, int? loai, string? tenSanPham, int offset, int limit)
+        private async Task<List<QLCLBaoCaoBienDongGia>> GetBaoCaoBienDongGiaData(DateTime? fromDate, DateTime? toDate, int? province, string wards, int? loai, string tenSanPham, int offset, int limit)
         {
             var sql = @"
                 SELECT * FROM CreateFunctionDashboardBienDongGia(
@@ -75,7 +75,7 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value,
+                ["@Ward"] = wards ?? (object)DBNull.Value,
                 ["@Loai"] = loai ?? (object)DBNull.Value,
                 ["@TenSanPham"] = tenSanPham ?? (object)DBNull.Value,
                 ["@Offset"] = offset,
@@ -94,7 +94,7 @@ namespace CoreAPI.Controllers
             });
         }
 
-        private async Task<int> GetBaoCaoBienDongGiaCount(DateTime? fromDate, DateTime? toDate, int? province, int? ward, int? loai, string? tenSanPham)
+        private async Task<int> GetBaoCaoBienDongGiaCount(DateTime? fromDate, DateTime? toDate, int? province, string wards, int? loai, string tenSanPham)
         {
             var sql = "SELECT COUNT(*) FROM CreateFunctionDashboardBienDongGia(@FromDate, @ToDate, @Province, @Ward, @Loai, @TenSanPham)";
             return await ExecuteScalarAsync<int>(sql, new Dictionary<string, object>
@@ -102,7 +102,7 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value,
+                ["@Ward"] = wards ?? (object)DBNull.Value,
                 ["@Loai"] = loai ?? (object)DBNull.Value,
                 ["@TenSanPham"] = tenSanPham ?? (object)DBNull.Value
             });
@@ -113,17 +113,19 @@ namespace CoreAPI.Controllers
             var result = new List<T>();
             using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
-            
+
             foreach (var param in parameters)
             {
                 command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter(param.Key, param.Value));
             }
 
             if (command.Connection.State != ConnectionState.Open)
-                command.Connection.Open();
+            {
+                await command.Connection.OpenAsync();
+            }
 
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
                 result.Add(mapper(reader));
             }
@@ -135,36 +137,23 @@ namespace CoreAPI.Controllers
         {
             using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
-            
+
             foreach (var param in parameters)
             {
                 command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter(param.Key, param.Value));
             }
 
             if (command.Connection.State != ConnectionState.Open)
-                command.Connection.Open();
+            {
+                await command.Connection.OpenAsync();
+            }
 
-            var result = command.ExecuteScalar();
+            var result = await command.ExecuteScalarAsync();
             return result != null ? (T)Convert.ChangeType(result, typeof(T)) : default(T);
         }
 
-        private DirectusMeta CreateMetaData(int totalCount, string thangNam, int? province, int? ward)
-        {
-            return new DirectusMeta
-            {
-                total_count = totalCount,
-                sort = new List<string> { "code" },
-                filter = new
-                {
-                    thangNam = thangNam,
-                    province = province,
-                    ward = ward
-                }
-            };
-        }
-
-        private DirectusMeta CreateMetaDataWithPagination(int totalCount, int filterCount, int offset, int limit, DateTime? fromDate, DateTime? toDate, 
-        int? province, int? ward, int? loai, string? tenSanPham)
+        private DirectusMeta CreateMetaDataWithPagination(int totalCount, int filterCount, int offset, int limit, DateTime? fromDate, DateTime? toDate,
+        int? province, string wards, int? loai, string tenSanPham)
         {
             return new DirectusMeta
             {
@@ -179,7 +168,7 @@ namespace CoreAPI.Controllers
                     fromDate = fromDate?.ToString("yyyy-MM-dd"),
                     toDate = toDate?.ToString("yyyy-MM-dd"),
                     province = province,
-                    ward = ward,
+                    ward = wards,
                     loai = loai,
                     tenSanPham = tenSanPham
                 }
@@ -200,7 +189,6 @@ namespace CoreAPI.Controllers
                 }
             };
         }
-
         #endregion
     }
-} 
+}

@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CoreAPI.Models;
 using CoreAPI.Models.BaseResponse;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace CoreAPI.Controllers
 {
@@ -33,7 +32,7 @@ namespace CoreAPI.Controllers
             [FromQuery] DateTime? fromDate = null,
             [FromQuery] DateTime? toDate = null,
             [FromQuery] int? province = null,
-            [FromQuery] int? ward = null,
+            [FromQuery] string wards = null,
             [FromQuery] int offset = 0,
             [FromQuery] int limit = 10)
         {
@@ -41,11 +40,11 @@ namespace CoreAPI.Controllers
 
             try
             {
-                var items = await GetBaoCaoThamDinhCapGCNData(fromDate, toDate, province, ward, offset, limit);
-                var totalCount = await GetBaoCaoThamDinhCapGCNCount(fromDate, toDate, province, ward);
+                var items = await GetBaoCaoThamDinhCapGCNData(fromDate, toDate, province, wards, offset, limit);
+                var totalCount = await GetBaoCaoThamDinhCapGCNCount(fromDate, toDate, province, wards);
 
                 response.Data = items;
-                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, ward);
+                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, wards);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -64,8 +63,8 @@ namespace CoreAPI.Controllers
         /// <param name="fromDate">Start date (optional)</param>
         /// <param name="toDate">End date (optional)</param>
         /// <param name="province">Province ID (optional)</param>
-        /// <param name="ward">Ward ID (optional)</param>
-        /// <param name="stringSearch">Search string (optional)</param>
+        /// <param name="wards">Ward ID (optional)</param>
+        /// <param name="thangNam">month string (optional)</param>
         /// <param name="offset">Pagination offset</param>
         /// <param name="limit">Pagination limit</param>
         /// <returns>Detailed establishment information</returns>
@@ -74,7 +73,7 @@ namespace CoreAPI.Controllers
             [FromQuery] DateTime? fromDate = null,
             [FromQuery] DateTime? toDate = null,
             [FromQuery] int? province = null,
-            [FromQuery] int? ward = null,
+            [FromQuery] string wards = null,
             [FromQuery] string thangNam = null,
             [FromQuery] int offset = 0,
             [FromQuery] int limit = 10)
@@ -83,11 +82,11 @@ namespace CoreAPI.Controllers
 
             try
             {
-                var items = await GetCoSoKhongCapGCNData(fromDate, toDate, province, ward, thangNam, offset, limit);
-                var totalCount = await GetCoSoKhongCapGCNCount(fromDate, toDate, province, ward, thangNam);
+                var items = await GetCoSoKhongCapGCNData(fromDate, toDate, province, wards, thangNam, offset, limit);
+                var totalCount = await GetCoSoKhongCapGCNCount(fromDate, toDate, province, wards, thangNam);
 
                 response.Data = items;
-                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, ward, thangNam);
+                response.Meta = CreateMetaDataWithPagination(totalCount, items.Count, offset, limit, fromDate, toDate, province, wards, thangNam);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -101,8 +100,7 @@ namespace CoreAPI.Controllers
         }
 
         #region Private Methods
-
-        private async Task<List<QLCLBaoCaoThamDinhCapGCN>> GetBaoCaoThamDinhCapGCNData(DateTime? fromDate, DateTime? toDate, int? province, int? ward, int offset, int limit)
+        private async Task<List<QLCLBaoCaoThamDinhCapGCN>> GetBaoCaoThamDinhCapGCNData(DateTime? fromDate, DateTime? toDate, int? province, string wards, int offset, int limit)
         {
             var sql = @"
                 SELECT * FROM QLCLFunctionBaoCaoThamDinhCapGCN(@FromDate, @ToDate, @Province, @Ward)
@@ -115,7 +113,7 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value,
+                ["@Ward"] = wards ?? (object)DBNull.Value,
                 ["@Offset"] = offset,
                 ["@Limit"] = limit
             }, reader => new QLCLBaoCaoThamDinhCapGCN
@@ -129,7 +127,7 @@ namespace CoreAPI.Controllers
             });
         }
 
-        private async Task<int> GetBaoCaoThamDinhCapGCNCount(DateTime? fromDate, DateTime? toDate, int? province, int? ward)
+        private async Task<int> GetBaoCaoThamDinhCapGCNCount(DateTime? fromDate, DateTime? toDate, int? province, string wards)
         {
             var sql = "SELECT COUNT(*) FROM QLCLFunctionBaoCaoThamDinhCapGCN(@FromDate, @ToDate, @Province, @Ward)";
             return await ExecuteScalarAsync<int>(sql, new Dictionary<string, object>
@@ -137,11 +135,11 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value
+                ["@Ward"] = wards ?? (object)DBNull.Value
             });
         }
 
-        private async Task<List<FunctionCoSoKhongDuocCapGCN>> GetCoSoKhongCapGCNData(DateTime? fromDate, DateTime? toDate, int? province, int? ward, string thangNam, int offset, int limit)
+        private async Task<List<FunctionCoSoKhongDuocCapGCN>> GetCoSoKhongCapGCNData(DateTime? fromDate, DateTime? toDate, int? province, string wards, string thangNam, int offset, int limit)
         {
             var sql = @"
                 SELECT * FROM QLCLFunctionBaoCaoCoSoKhongCapGCN(@FromDate, @ToDate, @Province, @Ward, @ThangNam)
@@ -154,7 +152,7 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value,
+                ["@Ward"] = wards ?? (object)DBNull.Value,
                 ["@ThangNam"] = thangNam ?? (object)DBNull.Value,
                 ["@Offset"] = offset,
                 ["@Limit"] = limit
@@ -169,7 +167,7 @@ namespace CoreAPI.Controllers
             });
         }
 
-        private async Task<int> GetCoSoKhongCapGCNCount(DateTime? fromDate, DateTime? toDate, int? province, int? ward, string thangNam)
+        private async Task<int> GetCoSoKhongCapGCNCount(DateTime? fromDate, DateTime? toDate, int? province, string wards, string thangNam)
         {
             var sql = "SELECT COUNT(*) FROM QLCLFunctionBaoCaoCoSoKhongCapGCN(@FromDate, @ToDate, @Province, @Ward, @ThangNam)";
             return await ExecuteScalarAsync<int>(sql, new Dictionary<string, object>
@@ -177,7 +175,7 @@ namespace CoreAPI.Controllers
                 ["@FromDate"] = fromDate ?? (object)DBNull.Value,
                 ["@ToDate"] = toDate ?? (object)DBNull.Value,
                 ["@Province"] = province ?? (object)DBNull.Value,
-                ["@Ward"] = ward ?? (object)DBNull.Value,
+                ["@Ward"] = wards ?? (object)DBNull.Value,
                 ["@ThangNam"] = thangNam ?? (object)DBNull.Value
             });
         }
@@ -187,17 +185,19 @@ namespace CoreAPI.Controllers
             var result = new List<T>();
             using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
-            
+
             foreach (var param in parameters)
             {
                 command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter(param.Key, param.Value));
             }
 
             if (command.Connection.State != ConnectionState.Open)
-                command.Connection.Open();
+            {
+                await command.Connection.OpenAsync();
+            }
 
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
                 result.Add(mapper(reader));
             }
@@ -209,20 +209,22 @@ namespace CoreAPI.Controllers
         {
             using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = sql;
-            
+
             foreach (var param in parameters)
             {
                 command.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter(param.Key, param.Value));
             }
 
             if (command.Connection.State != ConnectionState.Open)
-                command.Connection.Open();
+            {
+                await command.Connection.OpenAsync();
+            }
 
-            var result = command.ExecuteScalar();
+            var result = await command.ExecuteScalarAsync();
             return result != null ? (T)Convert.ChangeType(result, typeof(T)) : default(T);
         }
 
-        private DirectusMeta CreateMetaDataWithPagination(int totalCount, int filterCount, int offset, int limit, DateTime? fromDate, DateTime? toDate, int? province, int? ward, string thangNam = null)
+        private DirectusMeta CreateMetaDataWithPagination(int totalCount, int filterCount, int offset, int limit, DateTime? fromDate, DateTime? toDate, int? province, string wards, string thangNam = null)
         {
             return new DirectusMeta
             {
@@ -237,7 +239,7 @@ namespace CoreAPI.Controllers
                     fromDate = fromDate?.ToString("yyyy-MM-dd"),
                     toDate = toDate?.ToString("yyyy-MM-dd"),
                     province = province,
-                    ward = ward,
+                    wards = wards,
                     thangNam = thangNam
                 }
             };
@@ -260,4 +262,4 @@ namespace CoreAPI.Controllers
 
         #endregion
     }
-} 
+}

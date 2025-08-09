@@ -4,7 +4,7 @@ CREATE OR ALTER FUNCTION QLCLFunctionChiTietKiemTraHauKiemATTP(
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @Province INT = NULL,
-    @Ward INT = NULL,
+    @Ward VARCHAR(500) = NULL,
     @StringSearch NVARCHAR(500) = NULL
 )
 RETURNS TABLE
@@ -36,7 +36,7 @@ RETURN
         AND (@FromDate IS NULL OR kt.ngay_kiem_tra >= @FromDate)
         AND (@ToDate IS NULL OR kt.ngay_kiem_tra <= @ToDate)
         AND (@Province IS NULL OR kt.province = @Province)
-        AND (@Ward IS NULL OR kt.ward = @Ward)
+        AND (@Ward IS NULL OR kt.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND (@StringSearch IS NULL OR sp.name LIKE N'%' + @StringSearch + '%'
             OR ct.chi_tieu_vi_pham LIKE N'%' + @StringSearch + '%'
             OR ct.muc_phat_hien LIKE N'%' + @StringSearch + '%')

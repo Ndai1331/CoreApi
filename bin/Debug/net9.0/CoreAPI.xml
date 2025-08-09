@@ -14,23 +14,24 @@
             Controller for QLCL Bao Cao Kiem Tra Hau Kiem ATTP
             </summary>
         </member>
-        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetDetail(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetDetail(System.String,System.Nullable{System.Int32},System.String)">
             <summary>
-            Get detailed information about establishments for a specific month, province, and ward
+            Get detailed information about establishments for a specific month, province, and wards
             </summary>
             <param name="thangNam">Month and year in format 'yyyy-MM'</param>
             <param name="province">Province ID (optional)</param>
-            <param name="ward">Ward ID (optional)</param>
+            <param name="wards">Ward ID (optional)</param>
             <returns>Detailed establishment information</returns>
         </member>
-        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetChiTiet(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoKiemTraHauKiemATTPController.GetChiTiet(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Int32,System.Int32)">
             <summary>
             Get detailed inspection information with filtering capabilities
             </summary>
             <param name="fromDate">Start date (optional)</param>
             <param name="toDate">End date (optional)</param>
             <param name="province">Province ID (optional)</param>
-            <param name="ward">Ward ID (optional)</param>
+            <param name="wards">Ward ID (optional)</param>
+            <param name="stringSearch">filter text (optional)</param>
             <param name="offset">Pagination offset</param>
             <param name="limit">Pagination limit</param>
             <returns>Detailed inspection information</returns>
@@ -40,15 +41,15 @@
             Controller for QLCL Bao Cao Tham Dinh Cap GCN
             </summary>
         </member>
-        <member name="M:CoreAPI.Controllers.QLCLBaoCaoThamDinhCapGCNController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+        <member name="M:CoreAPI.Controllers.QLCLBaoCaoThamDinhCapGCNController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Int32,System.Int32)">
             <summary>
             Get detailed information about establishments that were not granted certificates
             </summary>
             <param name="fromDate">Start date (optional)</param>
             <param name="toDate">End date (optional)</param>
             <param name="province">Province ID (optional)</param>
-            <param name="ward">Ward ID (optional)</param>
-            <param name="stringSearch">Search string (optional)</param>
+            <param name="wards">Ward ID (optional)</param>
+            <param name="thangNam">month string (optional)</param>
             <param name="offset">Pagination offset</param>
             <param name="limit">Pagination limit</param>
             <returns>Detailed establishment information</returns>
@@ -58,15 +59,15 @@
             Controller for QLCL Dashboard
             </summary>
         </member>
-        <member name="M:CoreAPI.Controllers.QLCLDashboardController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32)">
+        <member name="M:CoreAPI.Controllers.QLCLDashboardController.GetCoSoKhongCapGCN(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Int32,System.Int32)">
             <summary>
             Get detailed information about establishments that were not granted certificates
             </summary>
             <param name="fromDate">Start date (optional)</param>
             <param name="toDate">End date (optional)</param>
             <param name="province">Province ID (optional)</param>
-            <param name="ward">Ward ID (optional)</param>
-            <param name="stringSearch">Search string (optional)</param>
+            <param name="wards">Ward ID (optional)</param>
+            <param name="thangNam">Search string (optional)</param>
             <param name="offset">Pagination offset</param>
             <param name="limit">Pagination limit</param>
             <returns>Detailed establishment information</returns>

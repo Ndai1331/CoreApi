@@ -2,7 +2,7 @@ CREATE OR ALTER FUNCTION QLCLFunctionBaoCaoCoSoKhongCapGCN(
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @Province INT = NULL,
-    @Ward INT = NULL,
+    @Ward VARCHAR(500) = NULL,
     @ThangNam NVARCHAR(7) = NULL
 )
 RETURNS TABLE
@@ -23,7 +23,7 @@ RETURN
         AND (@FromDate IS NULL OR qlcl.ngay_tham_dinh >= @FromDate)
         AND (@ToDate IS NULL OR qlcl.ngay_tham_dinh <= @ToDate)
         AND (@Province IS NULL OR qlcl.province = @Province)
-        AND (@Ward IS NULL OR qlcl.ward = @Ward)
+        AND (@Ward IS NULL OR qlcl.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND qlcl.deleted = 0
         AND qlcl.loai = 1
         AND (qlcl.so_giay_chung_nhan IS NULL OR qlcl.so_giay_chung_nhan = ''
