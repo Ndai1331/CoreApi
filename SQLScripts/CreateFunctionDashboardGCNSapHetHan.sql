@@ -1,7 +1,7 @@
 -- Create FunctionDashboardGCNSapHetHan function
 CREATE OR ALTER FUNCTION FunctionDashboardGCNSapHetHan(
     @Province INT = NULL,
-    @Ward INT = NULL
+    @Ward VARCHAR(500) = NULL
 )
 RETURNS TABLE
 AS
@@ -23,8 +23,6 @@ RETURN
         AND cs.ngay_het_hieu_luc >= GETDATE()
         AND cs.ngay_het_hieu_luc <= DATEADD(MONTH, 1, GETDATE())
         AND (@Province IS NULL OR cs.province = @Province)
-        AND (@Ward IS NULL OR cs.ward = @Ward)
-    ORDER BY
-        cs.ngay_het_hieu_luc ASC
+        AND (@Ward IS NULL OR cs.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
 ) 
 

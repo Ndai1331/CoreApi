@@ -3,7 +3,7 @@ CREATE OR ALTER FUNCTION CreateFunctionDashboardBienDongGia(
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @Province INT = NULL,
-    @Ward INT = NULL,
+    @Ward VARCHAR(500) = NULL,
     @Loai INT = NULL,
     @TenSanPham NVARCHAR(255) = NULL
 )
@@ -32,10 +32,12 @@ RETURN
     LEFT JOIN Wards ON Wards.id = QLCLGiaCaNongSan.ward
     LEFT JOIN DonViTinh ON DonViTinh.id = QLCLGiaCaNongSan.don_vi_tinh
     WHERE 
-        (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
+        QLCLGiaCaNongSan.deleted = 0
+        AND QLCLSanPhamSanXuat.deleted = 0
+        AND (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
         AND (@ToDate IS NULL OR ngay_ghi_nhan <= @ToDate)
         AND (@Province IS NULL OR QLCLGiaCaNongSan.province = @Province)
-        AND (@Ward IS NULL OR QLCLGiaCaNongSan.ward = @Ward)
+        AND (@Ward IS NULL OR QLCLGiaCaNongSan.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND (@Loai IS NULL OR @Loai = 1) -- Filter for agricultural products
         AND (
             @TenSanPham IS NULL
@@ -67,10 +69,12 @@ RETURN
     LEFT JOIN Wards ON Wards.id = QLCLGiaCaVatTuNN.ward
     LEFT JOIN DonViTinh ON DonViTinh.id = QLCLGiaCaVatTuNN.don_vi_tinh
     WHERE 
-        (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
+        QLCLGiaCaVatTuNN.deleted = 0
+        AND QLCL_VatTuNongNghiep.deleted = 0
+        AND (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
         AND (@ToDate IS NULL OR ngay_ghi_nhan <= @ToDate)
         AND (@Province IS NULL OR QLCLGiaCaVatTuNN.province = @Province)
-        AND (@Ward IS NULL OR QLCLGiaCaVatTuNN.ward = @Ward)
+        AND (@Ward IS NULL OR QLCLGiaCaVatTuNN.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         AND (@Loai IS NULL OR @Loai = 2) -- Filter for agricultural materials
         AND (
             @TenSanPham IS NULL

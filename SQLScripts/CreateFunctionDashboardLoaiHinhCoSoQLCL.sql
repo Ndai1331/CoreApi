@@ -3,7 +3,7 @@ CREATE OR ALTER FUNCTION FunctionDashboardLoaiHinhCoSoQLCL(
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @Province INT = NULL,
-    @Ward INT = NULL
+    @Ward VARCHAR(500) = NULL
 )
 RETURNS TABLE
 AS
@@ -20,11 +20,8 @@ RETURN
         lhcs.deleted = 0
         AND (cs.deleted = 0 OR cs.deleted IS NULL)
         AND (@Province IS NULL OR cs.province = @Province)
-        AND (@Ward IS NULL OR cs.ward = @Ward)
+        AND (@Ward IS NULL OR cs.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
         GROUP BY
         lhcs.code,
-        lhcs.name
-    ORDER BY
-        so_luong_co_so DESC,
         lhcs.name
 ) 
