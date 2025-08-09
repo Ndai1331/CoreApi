@@ -80,7 +80,6 @@ namespace CoreAPI.Controllers
         {
             var response = new DirectusResponse<FunctionCoSoKhongDuocCapGCN>();
 
-
             try
             {
                 var items = await GetCoSoKhongCapGCNData(fromDate, toDate, province, wards, thangNam, offset, limit);
@@ -260,7 +259,6 @@ namespace CoreAPI.Controllers
                 }
             };
         }
-
         #endregion
     }
 }
