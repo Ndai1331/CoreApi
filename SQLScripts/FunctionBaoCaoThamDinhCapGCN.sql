@@ -24,7 +24,7 @@ RETURN
         AND (@FromDate IS NULL OR qlcl.ngay_tham_dinh >= @FromDate)
         AND (@ToDate IS NULL OR qlcl.ngay_tham_dinh <= @ToDate)
         AND (@Province IS NULL OR qlcl.province = @Province)
-        AND (@Ward IS NULL OR qlcl.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR qlcl.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         AND qlcl.deleted = 0
         AND qlcl.loai = 1
     GROUP BY

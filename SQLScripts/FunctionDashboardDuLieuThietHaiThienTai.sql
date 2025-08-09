@@ -22,6 +22,6 @@ RETURN
     AND (@FromDate IS NULL OR tttt.ngay_ghi_nhan >= @FromDate)
     AND (@ToDate IS NULL OR tttt.ngay_ghi_nhan <= @ToDate)
     AND (@Province IS NULL OR tttt.province = @Province)
-    AND (@Ward IS NULL OR tttt.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+    AND (@Ward IS NULL OR tttt.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
     GROUP BY lhtt.name
 )

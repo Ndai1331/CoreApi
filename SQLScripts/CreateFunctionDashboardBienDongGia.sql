@@ -37,7 +37,7 @@ RETURN
         AND (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
         AND (@ToDate IS NULL OR ngay_ghi_nhan <= @ToDate)
         AND (@Province IS NULL OR QLCLGiaCaNongSan.province = @Province)
-        AND (@Ward IS NULL OR QLCLGiaCaNongSan.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR QLCLGiaCaNongSan.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         AND (@Loai IS NULL OR @Loai = 1) -- Filter for agricultural products
         AND (
             @TenSanPham IS NULL
@@ -74,7 +74,7 @@ RETURN
         AND (@FromDate IS NULL OR ngay_ghi_nhan >= @FromDate)
         AND (@ToDate IS NULL OR ngay_ghi_nhan <= @ToDate)
         AND (@Province IS NULL OR QLCLGiaCaVatTuNN.province = @Province)
-        AND (@Ward IS NULL OR QLCLGiaCaVatTuNN.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR QLCLGiaCaVatTuNN.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         AND (@Loai IS NULL OR @Loai = 2) -- Filter for agricultural materials
         AND (
             @TenSanPham IS NULL

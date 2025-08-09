@@ -20,6 +20,6 @@ RETURN
     AND (@FromDate IS NULL OR csdb.thoi_diem_ghi_nhan >= @FromDate)
     AND (@ToDate IS NULL OR csdb.thoi_diem_ghi_nhan <= @ToDate)
     AND (@Province IS NULL OR csdb.province = @Province)
-    AND (@Ward IS NULL OR csdb.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+    AND (@Ward IS NULL OR csdb.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
     GROUP BY vsvgh.name
 )

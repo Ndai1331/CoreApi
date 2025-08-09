@@ -18,7 +18,7 @@ RETURN
             AND (@FromDate IS NULL OR ngay_cap_gcn >= @FromDate)
             AND (@ToDate IS NULL OR ngay_cap_gcn <= @ToDate)
             AND (@Province IS NULL OR province = @Province)
-            AND (@Ward IS NULL OR ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+            AND (@Ward IS NULL OR ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         ) AS CoSoSanXuatPhanBon,
         (
             SELECT
@@ -28,7 +28,7 @@ RETURN
             AND (@FromDate IS NULL OR ngay_cap >= @FromDate)
             AND (@ToDate IS NULL OR ngay_cap <= @ToDate)
             AND (@Province IS NULL OR province = @Province)
-            AND (@Ward IS NULL OR ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+            AND (@Ward IS NULL OR ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         ) AS CoSoDuDieuKienBuonBanPhanBon,
         (
             SELECT
@@ -38,7 +38,7 @@ RETURN
             AND (@FromDate IS NULL OR ngay_cap >= @FromDate)
             AND (@ToDate IS NULL OR ngay_cap <= @ToDate)
             AND (@Province IS NULL OR province = @Province)
-            AND (@Ward IS NULL OR ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+            AND (@Ward IS NULL OR ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         ) AS CoSoSanXuatThuocBVTV,
         (
             SELECT
@@ -48,7 +48,7 @@ RETURN
             AND (@FromDate IS NULL OR ngay_cap >= @FromDate)
             AND (@ToDate IS NULL OR ngay_cap <= @ToDate)
             AND (@Province IS NULL OR province = @Province)
-            AND (@Ward IS NULL OR ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+            AND (@Ward IS NULL OR ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         ) AS CoSoKinhDoanhThuocBVTV,
         (
             SELECT
@@ -62,8 +62,8 @@ RETURN
             AND (@Province IS NULL OR cssx.province = @Province OR cskd.province = @Province)
             AND (
                 @Ward IS NULL
-                OR cssx.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ','))
-                OR cskd.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ','))
+                OR cssx.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ','))
+                OR cskd.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ','))
             )
         ) AS ViPhamSanXuatKinhDoanhThuocBVTV
 )

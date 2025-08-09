@@ -26,7 +26,7 @@ RETURN
         AND (@FromDate IS NULL OR qlcl.ngay_kiem_tra >= @FromDate)
         AND (@ToDate IS NULL OR qlcl.ngay_kiem_tra <= @ToDate)
         AND (@Province IS NULL OR qlcl.province = @Province)
-        AND (@Ward IS NULL OR qlcl.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR qlcl.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         AND qlcl.deleted = 0
     GROUP BY
         FORMAT(qlcl.ngay_kiem_tra, 'yyyy-MM'),

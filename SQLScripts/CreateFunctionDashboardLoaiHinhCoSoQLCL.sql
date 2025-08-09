@@ -20,7 +20,7 @@ RETURN
         lhcs.deleted = 0
         AND (cs.deleted = 0 OR cs.deleted IS NULL)
         AND (@Province IS NULL OR cs.province = @Province)
-        AND (@Ward IS NULL OR cs.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR cs.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
         GROUP BY
         lhcs.code,
         lhcs.name

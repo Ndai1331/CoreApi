@@ -23,6 +23,6 @@ RETURN
         AND cs.ngay_het_hieu_luc >= GETDATE()
         AND cs.ngay_het_hieu_luc <= DATEADD(MONTH, 1, GETDATE())
         AND (@Province IS NULL OR cs.province = @Province)
-        AND (@Ward IS NULL OR cs.ward IN (SELECT value FROM STRING_SPLIT(@Ward, ',')))
+        AND (@Ward IS NULL OR cs.ward IN (SELECT TRIM(value) FROM STRING_SPLIT(@Ward, ',')))
 ) 
 
