@@ -12,21 +12,27 @@ AS
 RETURN
 (
     SELECT
+        0 id,
         t.san_pham,
+        SUM(t.so_luong_mau) AS so_luong_mau,
         t.chi_tieu,
         SUM(t.so_mau_khong_dat) AS so_mau_khong_dat,
-        SUM(t.so_luong_mau) AS so_luong_mau
+        '' chi_tieu_vi_pham,
+        '' muc_phat_hien
     FROM (
         SELECT 
+            ct.id,
             sp.name AS san_pham,
-            ct.so_luong_mau,
+            COALESCE(ct.so_luong_mau, 0) so_luong_mau,
             CASE ct.chi_tieu
                 WHEN 1 THEN N'Chỉ tiêu vi sinh'
                 WHEN 2 THEN N'Chỉ tiêu thuốc BVTV'
                 WHEN 3 THEN N'Chỉ tiêu hóa chất, chất bảo quản'
             ELSE N'Không xác định'
             END AS chi_tieu,
-            COALESCE(ct.so_mau_khong_dat, 0) so_mau_khong_dat
+            COALESCE(ct.so_mau_khong_dat, 0) so_mau_khong_dat,
+            ct.chi_tieu_vi_pham,
+            ct.muc_phat_hien
         FROM
             QLCLKiemTraHauKiemATTPChiTiet ct
             INNER JOIN QLCLKiemTraHauKiemATTP kt ON ct.kiem_tra_hau_kiem_attp = kt.id
